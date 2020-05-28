@@ -10,6 +10,8 @@ This is a JavaScript tool that generates random passwords.
 
 ![image](https://user-images.githubusercontent.com/61371428/83200774-b31cad00-a109-11ea-8c14-c814fbfc4b69.png)
 
+![image](https://user-images.githubusercontent.com/61371428/83201380-fa576d80-a10a-11ea-9786-22d85a757e4f.png)
+
 # Link to Website
 https://anderdw.github.io/Code-Quiz/
 
