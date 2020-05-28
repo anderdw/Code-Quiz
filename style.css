@@ -108,3 +108,15 @@ body.wrong {
 #timer.btn {
     text-align: right;
 }
+
+#codingQuizScore {
+    text-align: center;
+    color: black;
+}
+
+#hsTable {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+  }

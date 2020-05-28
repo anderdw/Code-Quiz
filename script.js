@@ -3,35 +3,91 @@ const nextButton = document.getElementById('next-btn')
 const highscoreButton = document.getElementById('highscore-btn')
 const timerButton = document.getElementById('timer-btn')
 const codingQuiz = document.getElementById('codingQuiz')
+const finishButton = document.getElementById('finish-btn')
+const codingScore = document.getElementById('codingQuizScore')
+//const scoreTable = document.getElementById('scoreTable')
 
 const questionContainerElement = document.getElementById('question-container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons')
+const timerEl = document.querySelector('#timer3d')
 
 let shuffledQuestions, currentQuestionIndex
 
+var interval;
+let timeLeft = 120;
 
-startButton.addEventListener('click', startGame)
+var highScores = [{Name: '', Scores: ''}];
+
+
+
+
+
+function intializeTimer() {
+    timeLeft = parseInt(timerEl.getAttribute("data-time"));
+    interval = setInterval(function() {
+        timeLeft--;
+        if (timeLeft > 0) {
+            timerEl.textContent = timeLeft;
+        } else {
+            clearInterval(interval);
+        }
+        
+    }, 1000);
+}
+
+
+startButton.addEventListener('click', startGame) 
+finishButton.addEventListener('click', endGame)
+
+
+
 nextButton.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
 
 function startGame() {
-
-   
-
-
-    console.log('Started')
     startButton.classList.add('hide')
     nextButton.classList.remove('hide')
-    highscoreButton.classList.remove('hide')
     timerButton.classList.remove('hide')
     questionContainerElement.classList.remove('hide')
     codingQuiz.classList.add('hide')
+    //scoreTable.classList.add('hide')
     shuffledQuestions = questions.sort(() => Math.random() - .5)
     currentQuestionIndex = 0
     setNextQuestion()
+    intializeTimer()
+}
+
+//Working on timer
+function endGame() {
+    questionContainerElement.classList.add('hide')
+    codingScore.classList.remove('hide')
+    //scoreTable.classList.remove('hide')
+}
+
+
+function forScore() {
+    var x = document.getElementById('myText').value;
+   
+    var score = document.getElementById('timer3d').innerHTML;
+    highScores.push({name: x, score: score});
+    var html = '<table>';
+    html += '<tr>';
+    for( var j in highScores[0] ) {
+    html += '<th>' + j + '</th>';
+    }
+    html += '</tr>';
+    for( var i = 0; i < highScores.length; i++) {
+    html += '<tr>';
+    for( var j in highScores[i] ) {
+        html += '<td>' + highScores[i][j] + '</td>';
+    }
+    html += '</tr>';
+    }
+    html += '</table>';
+    document.getElementById('hsTable').innerHTML = html;
 }
 
 function setNextQuestion() {
@@ -58,6 +114,8 @@ function resetState() {
     nextButton.classList.add('hide')
     while (answerButtonsElement.firstChild) {
         answerButtonsElement.removeChild(answerButtonsElement.firstChild)
+        codingScore.classList.add('hide')
+        finishButton.classList.add('hide')
     }
 }
 
@@ -71,9 +129,13 @@ Array.from(answerButtonsElement.children).forEach(button => {
 if (shuffledQuestions.length > currentQuestionIndex + 1) {
     nextButton.classList.remove('hide')
 } else {
-    // This is where I need to do something with the high score button and also a restart button??? Look at the readme and see what it wants you to do.
     startButton.innerText = 'Restart'
     startButton.classList.remove('hide')
+    finishButton.classList.remove('hide')
+    clearInterval(interval)
+}
+if (correct == null) {
+    timeLeft = timeLeft - 10
 }
 }
 
@@ -83,6 +145,7 @@ function setStatusClass(element, correct) {
         element.classList.add('correct')
     } else {
         element.classList.add('wrong')
+        
     }
 }
 
@@ -96,7 +159,7 @@ const questions = [
         question: 'What does the acronym CSS mean?',
         answers: [
             { text: 'Cascading Style Sheets', correct: true},
-            { text: 'Conquer Style Sheets', correct: false},
+            { text: 'Conquer Style Sheets', correct: false}, 
             { text: 'Computer Style Sheets', correct: false},
             { text: 'Colombian Style Sheets', correct: false},
         ]
@@ -146,28 +209,8 @@ const questions = [
             { text: 'It is a database', correct: false},
         ]
     },
+    
 ]
 
 
-function startTimer(duration, display) {
-    var timer = duration, minutes, seconds;
-    setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
 
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-
-        display.textContent = minutes + ":" + seconds;
-
-        if (--timer < 0) {
-            timer = duration;
-        }
-    }, 1000);
-}
-
-window.onload = function () {
-    var twoMinutes = 60 * 2,
-        display = document.querySelector('#time');
-    startTimer(twoMinutes, display);
-};
